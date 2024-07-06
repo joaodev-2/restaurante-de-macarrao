@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body class="bg-gray-100 flex flex-col items-center">
@@ -69,7 +67,7 @@
     </div>
 
     <button onclick="toggleCart()" class="fixed bottom-4 right-4 bg-white font-semibold p-4 rounded-full shadow-lg">
-        Ver Carrinho
+        <i class="fa-solid fa-cart-shopping"></i>
     </button>
 
     <div id="cartModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center hidden">
@@ -144,7 +142,6 @@
 
         updateCartDisplay();
 
-        // Envie o carrinho para o backend
         fetch('/add-to-cart', {
             method: 'POST',
             headers: {
@@ -153,7 +150,7 @@
             },
             body: JSON.stringify(cart)
         }).then(response => {
-            // Manipule a resposta do backend, se necessário
+           
         }).catch(error => {
             console.error('Erro ao enviar o carrinho:', error);
         });
@@ -239,6 +236,7 @@
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
         const total = parseFloat(document.getElementById('paymentTotal').textContent);
 
+        togglePaymentModal();
         fetch('/orders', {
                 method: 'POST',
                 headers: {
@@ -264,11 +262,18 @@
                     position: "right",
                     backgroundColor: "#4CAF50",
                     stopOnFocus: true,
-                }).showToast();
-
-                togglePaymentModal();
+                }).showToast();       
             }).catch(error => {
                 console.error('Erro ao processar pagamento:', error);
+                Toastify({
+                    text: "Erro ao realizar pagamento :(",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "red",
+                    stopOnFocus: true,
+                }).showToast(); 
             });
     }
 </script>
